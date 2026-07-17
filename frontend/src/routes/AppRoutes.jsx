@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import ProtectedRoute from './ProtectedRoute';
 import DashboardLayout from '../layouts/DashboardLayout';
 import AuthLayout from '../layouts/AuthLayout';
@@ -13,7 +14,6 @@ const ComplaintRegistration = lazy(() => import('../pages/ComplaintRegistration'
 const ComplaintTracking = lazy(() => import('../pages/ComplaintTracking'));
 const ComplaintHistory = lazy(() => import('../pages/ComplaintHistory'));
 const Feedback = lazy(() => import('../pages/Feedback'));
-const Settings = lazy(() => import('../pages/Settings'));
 
 const PageFallback = () => (
   <div className="flex items-center justify-center min-h-[60vh]">
@@ -35,9 +35,32 @@ const NotFound = () => {
   );
 };
 
+const TitleUpdater = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname;
+    let pageName = 'Dashboard';
+    
+    if (path.includes('/login')) pageName = 'login';
+    else if (path.includes('/register') && !path.includes('complaint')) pageName = 'register';
+    else if (path.includes('/dashboard')) pageName = 'Dashboard';
+    else if (path.includes('/complaint/register')) pageName = 'Register Grievance';
+    else if (path.includes('/complaint/track')) pageName = 'Track Grievance';
+    else if (path.includes('/complaint/history')) pageName = 'Grievance History';
+    else if (path.includes('/feedback')) pageName = 'Feedback';
+    
+    document.title = `Citizen Grievance Portal / ${pageName}`;
+  }, [location]);
+
+  return null;
+};
+
 export const AppRoutes = () => {
   return (
-    <Suspense fallback={<PageFallback />}>
+    <>
+      <TitleUpdater />
+      <Suspense fallback={<PageFallback />}>
       <Routes>
         {/* Public Auth Routes */}
         <Route
@@ -57,7 +80,7 @@ export const AppRoutes = () => {
           }
         />
 
-        {/* Protected Dashboard Routes */}
+        {/* Protected Citizen Dashboard Routes */}
         <Route
           path="/dashboard"
           element={
@@ -68,7 +91,7 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/complaint/register"
           element={
@@ -79,7 +102,7 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/complaint/track"
           element={
@@ -90,7 +113,7 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/complaint/history"
           element={
@@ -101,24 +124,13 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/feedback"
           element={
             <ProtectedRoute>
               <DashboardLayout>
                 <Feedback />
-              </DashboardLayout>
-            </ProtectedRoute>
-          }
-        />
-        
-        <Route
-          path="/settings"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout>
-                <Settings />
               </DashboardLayout>
             </ProtectedRoute>
           }
@@ -140,6 +152,7 @@ export const AppRoutes = () => {
         />
       </Routes>
     </Suspense>
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Check, AlertCircle, Clock, Send, Hammer, CheckCircle2, Lock } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
 
 const STEPS = [
   { status: 'PENDING', label: 'Pending', icon: Clock, desc: 'Grievance Registered' },
@@ -10,6 +11,32 @@ const STEPS = [
 ];
 
 export const Stepper = ({ currentStatus }) => {
+  const { t } = useLanguage();
+
+  const translateLabel = (step) => {
+    const statusKeyMap = {
+      'PENDING': 'pending',
+      'ASSIGNED': 'assigned',
+      'IN_PROGRESS': 'inProgress',
+      'RESOLVED': 'resolved',
+      'CLOSED': 'closed',
+      'REJECTED': 'rejected'
+    };
+    return t(statusKeyMap[step.status]) || step.label;
+  };
+
+  const translateDesc = (step) => {
+    const descKeyMap = {
+      'PENDING': 'grievanceRegistered',
+      'ASSIGNED': 'assignedToOfficer',
+      'IN_PROGRESS': 'workUnderExecution',
+      'RESOLVED': 'grievanceResolvedDesc',
+      'CLOSED': 'feedbackSubmitted',
+      'REJECTED': 'rejectedByDept'
+    };
+    return t(descKeyMap[step.status]) || step.desc;
+  };
+
   // If rejected, replace final step or modify steps
   let activeSteps = [...STEPS];
   if (currentStatus === 'REJECTED') {
@@ -55,9 +82,9 @@ export const Stepper = ({ currentStatus }) => {
               </div>
               <div className="pt-0.5">
                 <p className={`text-sm font-semibold ${isActive ? 'text-primary' : 'text-gray-700'}`}>
-                  {step.label}
+                  {translateLabel(step)}
                 </p>
-                <p className="text-xs text-gray-500">{step.desc}</p>
+                <p className="text-xs text-gray-500">{translateDesc(step)}</p>
               </div>
             </div>
           );
@@ -93,9 +120,9 @@ export const Stepper = ({ currentStatus }) => {
                   {/* Labels */}
                   <div className="text-center mt-3 absolute -bottom-14 w-32">
                     <p className={`text-xs font-semibold ${isActive ? 'text-primary font-bold' : 'text-gray-700'}`}>
-                      {step.label}
+                      {translateLabel(step)}
                     </p>
-                    <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{step.desc}</p>
+                    <p className="text-[10px] text-gray-400 leading-tight mt-0.5">{translateDesc(step)}</p>
                   </div>
                 </div>
 
@@ -119,3 +146,4 @@ export const Stepper = ({ currentStatus }) => {
     </div>
   );
 };
+

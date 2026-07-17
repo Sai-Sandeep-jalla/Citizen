@@ -57,11 +57,11 @@ export const api = {
     let complaints = getComplaintsFromStorage();
     let feedbacks = getFeedbackFromStorage();
 
-    // Fetch the logged-in user profile to isolate citizen metrics
+    // Fetch the logged-in user profile to isolate user metrics
     const userStr = localStorage.getItem('citizen_portal_user');
     const user = userStr ? JSON.parse(userStr) : null;
 
-    if (user && user.role === 'CITIZEN') {
+    if (user) {
       complaints = complaints.filter((c) => c.citizenId === user.id);
       feedbacks = feedbacks.filter((f) => f.citizenId === user.id);
     }

@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './Button';
+import { useLanguage } from '../hooks/useLanguage';
 
 export const Pagination = ({
   currentPage,
@@ -9,6 +10,8 @@ export const Pagination = ({
   itemsPerPage = 10,
   className = ''
 }) => {
+  const { t } = useLanguage();
+
   if (totalPages <= 1) return null;
 
   const startIdx = (currentPage - 1) * itemsPerPage + 1;
@@ -23,14 +26,24 @@ export const Pagination = ({
     return pages;
   };
 
+  const getCountHtml = () => {
+    const template = t('showingEntries') || 'Showing {start} to {end} of {total} entries';
+    const safeStart = `<span class="font-semibold text-gray-800">${startIdx}</span>`;
+    const safeEnd = `<span class="font-semibold text-gray-800">${endIdx}</span>`;
+    const safeTotal = `<span class="font-semibold text-gray-800">${totalItems}</span>`;
+    return template
+      .replace('{start}', safeStart)
+      .replace('{end}', safeEnd)
+      .replace('{total}', safeTotal);
+  };
+
   return (
     <div className={`flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-1 bg-transparent ${className}`}>
       {/* Items count indicator */}
-      <div className="text-xs text-gray-500 font-medium">
-        Showing <span className="font-semibold text-gray-800">{startIdx}</span> to{' '}
-        <span className="font-semibold text-gray-800">{endIdx}</span> of{' '}
-        <span className="font-semibold text-gray-800">{totalItems}</span> entries
-      </div>
+      <div 
+        className="text-xs text-gray-500 font-medium"
+        dangerouslySetInnerHTML={{ __html: getCountHtml() }}
+      />
 
       {/* Control Buttons */}
       <div className="flex items-center space-x-1.5">
@@ -71,3 +84,4 @@ export const Pagination = ({
   );
 };
 export default Pagination;
+

@@ -43,32 +43,36 @@ export const AuthProvider = ({ children }) => {
       throw new Error('Invalid email domain! Use @gmail.com for Citizen, @dept.in for Officer, or @admin.in for Admin.');
     }
 
-    // Try to find if user is custom registered
+    // Look up user in the registered users store
     const customUsers = JSON.parse(localStorage.getItem('registered_users') || '[]');
     const found = customUsers.find(u => u.email === email);
-    
+
     let selectedUser;
-    if (found) {
+
+    if (targetRole === 'CITIZEN') {
+      // Citizens MUST be pre-registered via the Register page
+      if (!found) {
+        setLoading(false);
+        throw new Error('No account found for this email. Please register first to access the portal.');
+      }
       selectedUser = { ...found, role: targetRole };
     } else {
-      // Construct a new user profile dynamically since there are no pre-defined default mock profiles
-      const defaultName = email.split('@')[0].split(/[._-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-      selectedUser = {
-        id: 'usr-' + Math.random().toString(36).substr(2, 9),
-        name: targetRole === 'OFFICER' ? `Officer ${defaultName}` : targetRole === 'ADMIN' ? `Admin ${defaultName}` : defaultName,
-        email,
-        mobile: '9876543210',
-        role: targetRole,
-        district: 'New Delhi',
-        state: 'Delhi',
-        pincode: '110001',
-        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(defaultName)}&background=${targetRole === 'OFFICER' ? '0B1E47' : 'F97316'}&color=fff`
-      };
-      
-      // If citizen, save them in registered users so their profile edits are remembered
-      if (targetRole === 'CITIZEN') {
-        customUsers.push(selectedUser);
-        localStorage.setItem('registered_users', JSON.stringify(customUsers));
+      // Admin / Officer accounts are system-provisioned — allow login without prior registration
+      if (found) {
+        selectedUser = { ...found, role: targetRole };
+      } else {
+        const defaultName = email.split('@')[0].split(/[._-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        selectedUser = {
+          id: 'usr-' + Math.random().toString(36).substr(2, 9),
+          name: targetRole === 'OFFICER' ? `Officer ${defaultName}` : `Admin ${defaultName}`,
+          email,
+          mobile: '9876543210',
+          role: targetRole,
+          district: 'New Delhi',
+          state: 'Delhi',
+          pincode: '110001',
+          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(defaultName)}&background=0B1E47&color=fff`
+        };
       }
     }
 
@@ -103,12 +107,8 @@ export const AuthProvider = ({ children }) => {
     customUsers.push(newUser);
     localStorage.setItem('registered_users', JSON.stringify(customUsers));
 
-    // Automatically login newly registered user
-    const mockToken = `mock-jwt-token-citizen-${Math.random().toString(36).substr(2, 9)}`;
-    setUser(newUser);
-    setToken(mockToken);
-    localStorage.setItem('citizen_portal_user', JSON.stringify(newUser));
-    localStorage.setItem('citizen_portal_token', mockToken);
+    // Do NOT automatically login newly registered user
+    // (User is required to login manually)
     
     setLoading(false);
     return newUser;

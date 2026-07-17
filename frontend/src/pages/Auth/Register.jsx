@@ -28,8 +28,8 @@ export const Register = () => {
         data.mobile,
         data.password
       );
-      toast.success('Registration successful! Welcome to the portal.');
-      navigate('/dashboard');
+      toast.success('Registration successful! Please log in to continue.');
+      navigate('/login');
     } catch (err) {
       toast.error(err.message || 'Registration failed.');
     } finally {

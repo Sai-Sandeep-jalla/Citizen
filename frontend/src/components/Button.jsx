@@ -15,12 +15,12 @@ export const Button = ({
   const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none';
   
   const variants = {
-    primary: 'bg-primary text-white hover:bg-primary-hover focus:ring-primary',
-    secondary: 'bg-accent text-white hover:bg-accent-hover focus:ring-accent',
-    outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-primary dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-    success: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
-    ghost: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-300 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white',
+    primary:   'bg-[#0B1E47] text-white hover:bg-[#1D4ED8] focus:ring-[#1D4ED8] shadow-sm',
+    secondary: 'bg-[#F97316] text-white hover:bg-[#EA580C] focus:ring-[#F97316] shadow-sm',
+    outline:   'border border-[#E2E8F0] bg-white text-[#0B1E47] hover:bg-[#F8FAFC] hover:border-[#0B1E47] focus:ring-[#1D4ED8]',
+    danger:    'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+    success:   'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
+    ghost:     'text-[#0B1E47] hover:bg-[#EFF6FF] hover:text-[#1D4ED8] focus:ring-[#1D4ED8]',
   };
 
   const sizes = {

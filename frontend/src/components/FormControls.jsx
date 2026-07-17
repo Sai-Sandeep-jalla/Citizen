@@ -13,7 +13,7 @@ export const Input = forwardRef(({
   return (
     <div className={`w-full space-y-1.5 ${className}`}>
       {label && (
-        <label htmlFor={name} className="block text-sm font-semibold text-gray-700">
+        <label htmlFor={name} className="block text-sm font-semibold" style={{ color: '#0B1E47' }}>
           {label}
         </label>
       )}
@@ -25,8 +25,8 @@ export const Input = forwardRef(({
         placeholder={placeholder}
         className={`
           block w-full rounded-lg border px-3 py-2 text-sm shadow-sm transition duration-200 outline-none
-          ${error ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary'}
-          bg-white text-gray-800 placeholder-gray-400
+          ${error ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#E2E8F0] focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8]/20'}
+          bg-white text-[#1E293B] placeholder-gray-400
         `}
         {...props}
       />
@@ -61,8 +61,8 @@ export const TextArea = forwardRef(({
         placeholder={placeholder}
         className={`
           block w-full rounded-lg border px-3 py-2 text-sm shadow-sm transition duration-200 outline-none resize-none
-          ${error ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary'}
-          bg-white text-gray-800 placeholder-gray-400
+          ${error ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#E2E8F0] focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8]/20'}
+          bg-white text-[#1E293B] placeholder-gray-400
         `}
         {...props}
       />
@@ -95,8 +95,8 @@ export const Dropdown = forwardRef(({
           name={name}
           id={name}
           className={`
-            block w-full rounded-lg border px-3 py-2 text-sm shadow-sm transition duration-200 outline-none appearance-none bg-white text-gray-800
-            ${error ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary'}
+            block w-full rounded-lg border px-3 py-2 text-sm shadow-sm transition duration-200 outline-none appearance-none bg-white text-[#1E293B]
+            ${error ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-[#E2E8F0] focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8]/20'}
           `}
           {...props}
         >
@@ -137,7 +137,7 @@ export const SearchBox = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="block w-full pl-10 pr-9 py-2 border border-gray-200 rounded-lg text-sm bg-white placeholder-gray-400 text-gray-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition"
+        className="block w-full pl-10 pr-9 py-2 border border-[#E2E8F0] rounded-lg text-sm bg-white placeholder-gray-400 text-[#1E293B] focus:outline-none focus:border-[#1D4ED8] focus:ring-1 focus:ring-[#1D4ED8]/20 shadow-sm transition"
       />
       {value && (
         <button
