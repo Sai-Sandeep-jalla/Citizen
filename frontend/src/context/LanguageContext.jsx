@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import english from "../locales/en.json";
 import { translateObject } from "../services/translationService";
 
-export const SUPPORTED_LANGUAGES = [
+const SUPPORTED_LANGUAGES = [
   { code: 'en', label: 'English' },
   { code: 'as', label: 'Assamese/অসমীয়া' },
   { code: 'bn', label: 'Bengali/বাংলা' },

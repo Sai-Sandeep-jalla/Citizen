@@ -6,15 +6,15 @@ export const MyProfile = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
 
-  const InfoCard = ({ icon: Icon, label, value }) => (
+  const InfoCard = ({ icon: Icon, labelKey, defaultLabel, value }) => (
     <div className="bg-white/80 backdrop-blur-md rounded-2xl p-5 border border-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-start space-x-4">
       <div className="p-3 bg-gradient-to-br from-blue-50 to-blue-100/50 text-blue-600 rounded-xl shadow-inner border border-blue-100/50">
         <Icon className="w-5 h-5" />
       </div>
       <div className="flex-1">
-        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{label}</p>
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{t(labelKey) || defaultLabel}</p>
         <p className="text-sm font-bold text-gray-800 break-words leading-tight">
-          {value || <span className="text-gray-300 italic font-medium">Not Provided</span>}
+          {value || <span className="text-gray-300 italic font-medium">{t('notProvided') || 'Not Provided'}</span>}
         </p>
       </div>
     </div>
@@ -26,7 +26,7 @@ export const MyProfile = () => {
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-2xl sm:text-4xl font-black text-[#0B1E47] tracking-tight">{t('myProfile') || 'My Profile'}</h1>
-        <p className="text-sm text-gray-500 mt-2 font-semibold">Your comprehensive digital citizen identity and records.</p>
+        <p className="text-sm text-gray-500 mt-2 font-semibold">{t('profileSubtitle') || 'Your comprehensive digital citizen identity and records.'}</p>
       </div>
 
       {/* Profile Header Card */}
@@ -74,8 +74,8 @@ export const MyProfile = () => {
                 <ShieldCheck className="w-8 h-8 text-green-500" />
               </div>
               <div>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Account Status</p>
-                <p className="text-sm font-black text-green-700">Verified & Active</p>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('accountStatus') || 'Account Status'}</p>
+                <p className="text-sm font-black text-green-700">{t('verifiedAndActive') || 'Verified & Active'}</p>
               </div>
             </div>
           </div>
@@ -89,22 +89,22 @@ export const MyProfile = () => {
         <div className="space-y-4">
           <div className="flex items-center space-x-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-            <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">Contact Identity</h3>
+            <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">{t('contactIdentity') || 'Contact Identity'}</h3>
           </div>
-          <InfoCard icon={Mail} label="Email Address" value={user?.email} />
-          <InfoCard icon={Phone} label="Mobile Number" value={user?.mobile} />
+          <InfoCard icon={Mail} labelKey="emailAddress" defaultLabel="Email Address" value={user?.email} />
+          <InfoCard icon={Phone} labelKey="mobileNumber" defaultLabel="Mobile Number" value={user?.mobile} />
         </div>
 
         {/* Column 2 */}
         <div className="space-y-4">
           <div className="flex items-center space-x-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-            <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">Demographics</h3>
+            <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">{t('demographics') || 'Demographics'}</h3>
           </div>
-          <InfoCard icon={User} label="Gender" value={user?.gender} />
-          <InfoCard icon={Calendar} label="Date of Birth" value={user?.dob} />
+          <InfoCard icon={User} labelKey="gender" defaultLabel="Gender" value={user?.gender} />
+          <InfoCard icon={Calendar} labelKey="dob" defaultLabel="Date of Birth" value={user?.dob} />
           {user?.role === 'OFFICER' && (
-             <InfoCard icon={Briefcase} label="Department" value={user?.department} />
+             <InfoCard icon={Briefcase} labelKey="department" defaultLabel="Department" value={user?.department} />
           )}
         </div>
 
@@ -112,11 +112,12 @@ export const MyProfile = () => {
         <div className="space-y-4">
           <div className="flex items-center space-x-2 mb-2">
             <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">Location & Compliance</h3>
+            <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">{t('locationCompliance') || 'Location & Compliance'}</h3>
           </div>
           <InfoCard 
             icon={MapPin} 
-            label="Full Address" 
+            labelKey="fullAddress"
+            defaultLabel="Full Address" 
             value={
               [user?.address, user?.district, user?.state, user?.pincode]
                 .filter(Boolean)
@@ -125,7 +126,8 @@ export const MyProfile = () => {
           />
           <InfoCard 
             icon={ShieldCheck} 
-            label="Aadhar / Identity Proof" 
+            labelKey="aadharProof"
+            defaultLabel="Aadhar / Identity Proof" 
             value={user?.aadhar ? 'XXXX-XXXX-' + user.aadhar.slice(-4) : null} 
           />
         </div>

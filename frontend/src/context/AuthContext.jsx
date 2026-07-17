@@ -5,24 +5,19 @@ import { api } from '../services/api';
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Check if user session exists in localStorage
-    const savedUser = localStorage.getItem('citizen_portal_user');
-    const savedToken = localStorage.getItem('citizen_portal_token');
-    
-    const timer = setTimeout(() => {
-      if (savedUser && savedToken) {
-        setUser(JSON.parse(savedUser));
-        setToken(savedToken);
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('citizen_portal_user');
+      if (savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
+        return JSON.parse(savedUser);
       }
-      setLoading(false);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, []);
+      return null;
+    } catch (e) {
+      return null;
+    }
+  });
+  const [token, setToken] = useState(() => localStorage.getItem('citizen_portal_token'));
+  const [loading, setLoading] = useState(false);
 
   const login = async (email, password, role = 'CITIZEN') => {
     setLoading(true);

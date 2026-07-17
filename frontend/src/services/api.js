@@ -4,6 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.citizenportal.
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 1500, // Reduced from 5000ms so offline backend falls back faster
   headers: {
     'Content-Type': 'application/json',
   },

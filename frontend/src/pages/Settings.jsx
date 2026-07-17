@@ -63,7 +63,7 @@ export const Settings = () => {
       {/* Title Header */}
       <div className="mb-8">
         <h1 className="text-2xl sm:text-4xl font-black text-[#0B1E47] tracking-tight">{t('settings')}</h1>
-        <p className="text-sm text-gray-500 mt-2 font-semibold">Manage your citizen profile parameters, local preferences, and communication alerts.</p>
+        <p className="text-sm text-gray-500 mt-2 font-semibold">{t('settingsSubtitle') || 'Manage your citizen profile parameters, local preferences, and communication alerts.'}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -80,7 +80,7 @@ export const Settings = () => {
               `}
             >
               <User className="w-5 h-5" />
-              <span>Edit Profile</span>
+              <span>{t('editProfile') || 'Edit Profile'}</span>
             </button>
             
             <button
@@ -91,7 +91,7 @@ export const Settings = () => {
               `}
             >
               <Bell className="w-5 h-5" />
-              <span>Notifications</span>
+              <span>{t('notifications') || 'Notifications'}</span>
             </button>
           </Card>
         </div>
@@ -107,7 +107,7 @@ export const Settings = () => {
                     <User className="w-5 h-5" />
                   </div>
                   <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">
-                    Edit Profile Details
+                    {t('editProfileDetails') || 'Edit Profile Details'}
                   </h3>
                 </div>
 
@@ -120,7 +120,7 @@ export const Settings = () => {
                     />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black text-gray-800 mb-1.5">Profile Picture</h4>
+                    <h4 className="text-sm font-black text-gray-800 mb-1.5">{t('profilePicture') || 'Profile Picture'}</h4>
                     <p className="text-[11px] font-medium text-gray-400 mb-3">JPG, GIF or PNG. Max size of 800K</p>
                     <button 
                       type="button" 
@@ -134,7 +134,7 @@ export const Settings = () => {
 
                 <div className="grid grid-cols-1 gap-5">
                   <Input
-                    label="Full Name"
+                    label={t('fullName') || 'Full Name'}
                     name="name"
                     error={errors.name}
                     {...register('name', { required: 'Name is required' })}
@@ -143,7 +143,7 @@ export const Settings = () => {
                   <div className="flex flex-col sm:flex-row sm:items-end gap-3">
                     <div className="flex-1">
                       <Input
-                        label="Email Address"
+                        label={t('emailAddress') || 'Email Address'}
                         name="email"
                         type="email"
                         error={errors.email}
@@ -162,14 +162,14 @@ export const Settings = () => {
                         ${emailVerified ? 'bg-green-50 text-green-700 border border-green-200 cursor-not-allowed' : 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-md hover:from-orange-600 hover:to-orange-700 active:scale-95'}
                       `}
                     >
-                      {emailVerified ? '✓ Verified' : 'Verify Email'}
+                      {emailVerified ? (t('verified') || '✓ Verified') : (t('verifyEmail') || 'Verify Email')}
                     </button>
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-end gap-3">
                     <div className="flex-1">
                       <Input
-                        label="Mobile Number"
+                        label={t('mobileNumber') || 'Mobile Number'}
                         name="mobile"
                         error={errors.mobile}
                         {...register('mobile', { required: 'Mobile is required' })}
@@ -187,7 +187,7 @@ export const Settings = () => {
                         ${phoneVerified ? 'bg-green-50 text-green-700 border border-green-200 cursor-not-allowed' : 'bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:shadow-md hover:from-orange-600 hover:to-orange-700 active:scale-95'}
                       `}
                     >
-                      {phoneVerified ? '✓ Verified' : 'Verify Phone'}
+                      {phoneVerified ? (t('verified') || '✓ Verified') : (t('verifyPhone') || 'Verify Phone')}
                     </button>
                   </div>
                 </div>
@@ -203,9 +203,9 @@ export const Settings = () => {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Saving...
+                        {t('saving') || 'Saving...'}
                       </span>
-                    ) : 'Save Profile Changes'}
+                    ) : (t('saveProfileChanges') || 'Save Profile Changes')}
                   </button>
                 </div>
               </form>
@@ -221,31 +221,31 @@ export const Settings = () => {
                   <Bell className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-black text-gray-800 uppercase tracking-widest">
-                  Notification Preferences
+                  {t('notificationPreferences') || 'Notification Preferences'}
                 </h3>
               </div>
 
               <div className="space-y-5">
                 <div className="flex items-start justify-between pb-4 border-b border-gray-50 group hover:bg-gray-50/50 p-2 rounded-xl transition-colors">
                   <div className="space-y-1">
-                    <p className="text-sm font-bold text-gray-900">Email Alerts</p>
-                    <p className="text-xs font-medium text-gray-500">Receive email notification when your complaint changes stage.</p>
+                    <p className="text-sm font-bold text-gray-900">{t('emailAlerts') || 'Email Alerts'}</p>
+                    <p className="text-xs font-medium text-gray-500">{t('emailAlertsDesc') || 'Receive email notification when your complaint changes stage.'}</p>
                   </div>
                   <input type="checkbox" defaultChecked className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
                 </div>
 
                 <div className="flex items-start justify-between pb-4 border-b border-gray-50 group hover:bg-gray-50/50 p-2 rounded-xl transition-colors">
                   <div className="space-y-1">
-                    <p className="text-sm font-bold text-gray-900">SMS Alerts</p>
-                    <p className="text-xs font-medium text-gray-500">Receive instant text updates on your registered mobile number.</p>
+                    <p className="text-sm font-bold text-gray-900">{t('smsAlerts') || 'SMS Alerts'}</p>
+                    <p className="text-xs font-medium text-gray-500">{t('smsAlertsDesc') || 'Receive instant text updates on your registered mobile number.'}</p>
                   </div>
                   <input type="checkbox" defaultChecked className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
                 </div>
 
                 <div className="flex items-start justify-between group hover:bg-gray-50/50 p-2 rounded-xl transition-colors">
                   <div className="space-y-1">
-                    <p className="text-sm font-bold text-gray-900">Government Scheme Announcements</p>
-                    <p className="text-xs font-medium text-gray-500">Receive alerts when new schemes are rolled out in your district.</p>
+                    <p className="text-sm font-bold text-gray-900">{t('govSchemeAnnouncements') || 'Government Scheme Announcements'}</p>
+                    <p className="text-xs font-medium text-gray-500">{t('govSchemeAnnouncementsDesc') || 'Receive alerts when new schemes are rolled out in your district.'}</p>
                   </div>
                   <input type="checkbox" className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
                 </div>
