@@ -4,9 +4,13 @@ import com.citizenportal.dto.SendOtpRequest;
 import com.citizenportal.dto.VerifyOtpRequest;
 import com.citizenportal.entity.UserOtp;
 import com.citizenportal.repository.UserOtpRepository;
+import com.citizenportal.repository.UserRepository;
 import com.citizenportal.util.OtpGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.citizenportal.entity.User;
+import com.citizenportal.repository.UserRepository;
+import com.citizenportal.dto.ResetPasswordRequest;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -18,6 +22,9 @@ public class UserService {
     private UserOtpRepository userOtpRepository;
     @Autowired
     private SmsService smsService;
+  
+    @Autowired
+    private UserRepository userRepository; 
 
    public String sendOtp(SendOtpRequest request) {
 
@@ -59,6 +66,39 @@ if (!userOtp.getOtp().equals(request.getOtp())) {
     userOtpRepository.save(userOtp);
 
     return "OTP Verified Successfully";
+}
+   public String resetPassword(ResetPasswordRequest request) {
+
+    Optional<UserOtp> optionalUserOtp =
+            userOtpRepository.findTopByPhoneNumberOrderByIdDesc(request.getPhoneNumber());
+
+    if (optionalUserOtp.isEmpty()) {
+        return "Phone Number Not Found";
+    }
+
+    UserOtp userOtp = optionalUserOtp.get();
+
+    if (!userOtp.isVerified()) {
+        return "Please verify OTP first";
+    }
+
+    Optional<User> optionalUser =
+            userRepository.findByPhoneNumber(request.getPhoneNumber());
+
+    if (optionalUser.isEmpty()) {
+        return "User Not Found";
+    }
+
+    User user = optionalUser.get();
+
+    user.setPassword(request.getNewPassword());
+
+    userRepository.save(user);
+
+    userOtp.setVerified(false);
+    userOtpRepository.save(userOtp);
+
+    return "Password Reset Successfully";
 }
 
 }
