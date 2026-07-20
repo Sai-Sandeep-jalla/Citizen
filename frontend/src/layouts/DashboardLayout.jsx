@@ -73,13 +73,8 @@ export const DashboardLayout = ({ children }) => {
     { path: '/feedback', label: t('feedbackRatings') || 'Feedback & Ratings', icon: MessageSquare }
   ];
 
-<<<<<<< HEAD
   const handleLogout = async () => {
     await logout();
-=======
-  const handleLogout = () => {
-    logout();
->>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
     navigate('/login');
   };
 

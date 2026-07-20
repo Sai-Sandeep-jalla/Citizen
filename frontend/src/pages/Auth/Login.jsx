@@ -23,22 +23,14 @@ export const Login = () => {
     defaultValues: {
       email: '',
       password: '',
-<<<<<<< HEAD
       username: 'CITIZEN'
-=======
-      role: 'CITIZEN'
->>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
     }
   });
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-<<<<<<< HEAD
       await login(data.email, data.password, data.username);
-=======
-      await login(data.email, data.password, data.role);
->>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
       toast.success(`${t('welcome')}!`);
       navigate('/dashboard');
     } catch (err) {
@@ -52,23 +44,14 @@ export const Login = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Dropdown
         label={t('selectRole')}
-<<<<<<< HEAD
         name="username"
-=======
-        name="role"
->>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
         options={[
           { value: 'CITIZEN', label: t('citizenRole') },
           { value: 'OFFICER', label: t('officerRole') },
           { value: 'ADMIN', label: t('adminRole') }
         ]}
-<<<<<<< HEAD
         error={errors.username}
         {...register('username', { required: 'Role selection is required' })}
-=======
-        error={errors.role}
-        {...register('role', { required: 'Role selection is required' })}
->>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
       />
 
       <Input

@@ -84,12 +84,8 @@ export const api = {
 
   // 3. Feedback API
   submitFeedback: async (feedbackData) => {
-<<<<<<< HEAD
     const complaintId = feedbackData.complaintId || feedbackData.id;
     const response = await apiClient.post(`/api/complaints/${complaintId}/feedback`, feedbackData);
-=======
-    const response = await apiClient.post('/api/feedback', feedbackData);
->>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
     return response.data;
   },
 
@@ -98,7 +94,6 @@ export const api = {
     return response.data;
   },
 
-<<<<<<< HEAD
   // 4. Auth & User API
   login: async (email, password, username = 'CITIZEN') => {
     const response = await apiClient.post('/api/users/login', { email, password, username });
@@ -137,21 +132,6 @@ export const api = {
 
   updateProfile: async (username, profileData) => {
     // username might be used depending on backend routing (PUT /api/users/profile or PUT /api/users/:username)
-=======
-  // 4. Auth API
-  login: async (email, password, role = 'CITIZEN') => {
-    const response = await apiClient.post('/api/auth/login', { email, password, role });
-    return response.data; // expects { user, token }
-  },
-
-  register: async (userData) => {
-    const response = await apiClient.post('/api/auth/register', userData);
-    return response.data;
-  },
-
-  updateProfile: async (userId, profileData) => {
-    // userId might be used depending on backend routing (PUT /api/users/profile or PUT /api/users/:id)
->>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
     // As per requirements: PUT /api/users/profile (assumes auth token identifies user)
     const response = await apiClient.put('/api/users/profile', profileData);
     return response.data;
