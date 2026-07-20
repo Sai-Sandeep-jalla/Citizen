@@ -1,0 +1,342 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════
+   DESIGN TOKEN THEME (Tailwind @theme)
+═══════════════════════════════════════════ */
+@theme {
+  /* Brand – Orange Accent */
+  --color-accent:           #F97316;
+  --color-accent-hover:     #EA580C;
+  --color-accent-light:     #FFF7ED;
+  --color-accent-border:    #FFEDD5;
+
+  /* Brand – Government Blue */
+  --color-primary:          #0B1E47;
+  --color-primary-hover:    #1D4ED8;
+  --color-primary-soft:     #EFF6FF;
+  --color-primary-border:   #DBEAFE;
+
+  /* Surface & Background */
+  --color-surface-white:    #FFFFFF;
+  --color-surface-bg:       #F8FAFC;
+  --color-border-neutral:   #E2E8F0;
+
+  /* Legacy aliases (keep for existing components) */
+  --color-bg-white:         #FFFFFF;
+  --color-text-dark:        #1E293B;
+  --color-lightgreen:       #EFF6FF;
+  --color-lightorange:      #FFF7ED;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ═══════════════════════════════════════════
+   CSS CUSTOM PROPERTIES  (global access)
+═══════════════════════════════════════════ */
+:root {
+  --highlight-orange-primary:  #F97316;
+  --highlight-orange-dark:     #EA580C;
+  --highlight-orange-light:    #FFF7ED;
+
+  --govt-blue-navy:            #0B1E47;
+  --govt-blue-royal:           #1D4ED8;
+  --govt-blue-soft:            #EFF6FF;
+
+  --surface-white:             #FFFFFF;
+  --surface-bg:                #F8FAFC;
+  --border-neutral:            #E2E8F0;
+}
+
+/* ═══════════════════════════════════════════
+   BASE LAYER
+═══════════════════════════════════════════ */
+@layer base {
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background-color: var(--surface-bg);
+    color: #1E293B;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Heading defaults */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--govt-blue-navy);
+  }
+
+  /* Anchor defaults */
+  a {
+    color: var(--govt-blue-royal);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+  a:hover {
+    color: var(--highlight-orange-primary);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   CUSTOM SCROLLBAR
+═══════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-neutral);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #CBD5E1;
+}
+
+/* ═══════════════════════════════════════════
+   AUTH PAGE  – Premium glass card
+═══════════════════════════════════════════ */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--govt-blue-navy) 0%, #1D4ED8 55%, #0B1E47 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 1rem;
+}
+
+/* geometric background pattern */
+.auth-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(249,115,22,0.18) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(29,78,216,0.25) 0%, transparent 40%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.03) 40px,
+      rgba(255,255,255,0.03) 41px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.03) 40px,
+      rgba(255,255,255,0.03) 41px
+    );
+  pointer-events: none;
+}
+
+.auth-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 26rem;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 1.25rem;
+  padding: 2.5rem 2rem;
+  box-shadow:
+    0 0 0 1px rgba(11,30,71,0.08),
+    0 8px 32px rgba(11,30,71,0.16),
+    0 2px 8px rgba(249,115,22,0.08);
+  backdrop-filter: blur(16px);
+  animation: slideUpFadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-logo-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--govt-blue-navy) 0%, var(--govt-blue-royal) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin: 0 auto 1rem;
+  box-shadow: 0 4px 14px rgba(11,30,71,0.30);
+}
+
+.auth-brand-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.35rem;
+}
+
+.auth-brand-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--highlight-orange-primary);
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   FORM CONTROL OVERRIDES (global palette)
+═══════════════════════════════════════════ */
+.form-input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+select,
+textarea {
+  background-color: var(--surface-white) !important;
+  border-color: var(--border-neutral) !important;
+  color: #1E293B;
+  transition: border-color 200ms, box-shadow 200ms;
+}
+.form-input:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--govt-blue-royal) !important;
+  box-shadow: 0 0 0 3px rgba(29,78,216,0.12) !important;
+  outline: none;
+}
+
+/* ═══════════════════════════════════════════
+   BUTTON PALETTE OVERRIDES
+═══════════════════════════════════════════ */
+/* primary = navy → accent-orange on hover via Tailwind classes (no override needed) */
+
+/* ═══════════════════════════════════════════
+   CARD SURFACE
+═══════════════════════════════════════════ */
+.card-surface {
+  background: var(--surface-white);
+  border: 1px solid var(--border-neutral);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 4px rgba(11,30,71,0.06);
+}
+
+/* ═══════════════════════════════════════════
+   ORANGE ACCENT BADGE / TAG
+═══════════════════════════════════════════ */
+.badge-orange {
+  background: var(--highlight-orange-light);
+  color: var(--highlight-orange-dark);
+  border: 1px solid var(--accent-border, #FFEDD5);
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-blue {
+  background: var(--govt-blue-soft);
+  color: var(--govt-blue-royal);
+  border: 1px solid var(--primary-border, #DBEAFE);
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
+  letter-spacing: 0.04em;
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes slideUpFadeIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0   rgba(29, 78, 216, 0.40); }
+  70%  { transform: scale(1);    box-shadow: 0 0 0 10px rgba(29, 78, 216, 0);   }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0   rgba(29, 78, 216, 0);   }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.pulse-ring-green {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.fade-in {
+  animation: fadeIn 0.35s ease both;
+}
+
+.slide-up {
+  animation: slideUpFadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Skeleton shimmer */
+.skeleton-shimmer {
+  background: linear-gradient(90deg, var(--border-neutral) 25%, #F1F5F9 50%, var(--border-neutral) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 0.5rem;
+}
+
+/* ═══════════════════════════════════════════
+   DASHBOARD STAT CARD
+═══════════════════════════════════════════ */
+.stat-card {
+  background: var(--surface-white);
+  border: 1px solid var(--border-neutral);
+  border-radius: 0.875rem;
+  padding: 1.25rem;
+  transition: box-shadow 200ms, transform 200ms;
+}
+.stat-card:hover {
+  box-shadow: 0 4px 16px rgba(11,30,71,0.10);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR NAV ACTIVE ITEM
+═══════════════════════════════════════════ */
+.nav-item-active {
+  background: linear-gradient(90deg, var(--govt-blue-royal), #2563EB);
+  color: #fff;
+  border-left: 3px solid var(--highlight-orange-primary);
+}
+
+/* ═══════════════════════════════════════════
+   PRINT STYLESHEET
+═══════════════════════════════════════════ */
+@media print {
+  .no-print { display: none !important; }
+  .print-layout {
+    display: block !important;
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    color: black;
+  }
+  .print-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+}
