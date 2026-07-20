@@ -6,18 +6,34 @@ const SUPPORTED_LANGUAGES = [
   { code: 'en', label: 'English' },
   { code: 'as', label: 'Assamese/অসমীয়া' },
   { code: 'bn', label: 'Bengali/বাংলা' },
+<<<<<<< HEAD
+=======
+  { code: 'brx', label: 'Bodo/बड़ो' },
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
   { code: 'doi', label: 'Dogri/डोगरी' },
   { code: 'gu', label: 'Gujarati/ગુજરાતી' },
   { code: 'hi', label: 'Hindi/हिंदी' },
   { code: 'kn', label: 'Kannada/ಕನ್ನಡ' },
+<<<<<<< HEAD
   { code: 'kok', label: 'Konkani/कोंकणी' },
   { code: 'mai', label: 'Maithili/मैथिली' },
   { code: 'ml', label: 'Malayalam/മലയാളം' },
+=======
+  { code: 'ks', label: 'Kashmiri/कॉशुर' },
+  { code: 'kok', label: 'Konkani/कोंकणी' },
+  { code: 'mai', label: 'Maithili/मैथिली' },
+  { code: 'ml', label: 'Malayalam/മലയാളം' },
+  { code: 'mni', label: 'Manipuri/মৈতৈলোন্' },
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
   { code: 'mr', label: 'Marathi/मराठी' },
   { code: 'ne', label: 'Nepali/नेपाली' },
   { code: 'or', label: 'Odia/ଓଡ଼ିଆ' },
   { code: 'pa', label: 'Punjabi/ਪੰਜਾਬੀ' },
   { code: 'sa', label: 'Sanskrit/संस्कृतम्' },
+<<<<<<< HEAD
+=======
+  { code: 'sat', label: 'Santali/ᱥᱟᱱᱛᱟᱲᱤ' },
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
   { code: 'sd', label: 'Sindhi/سنڌي' },
   { code: 'ta', label: 'Tamil/தமிழ்' },
   { code: 'te', label: 'Telugu/తెలుగు' },

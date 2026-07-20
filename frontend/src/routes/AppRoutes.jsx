@@ -37,6 +37,7 @@ const NotFound = () => {
   );
 };
 
+<<<<<<< HEAD
 // Unauthorized Access Component
 const Unauthorized = () => {
   return (
@@ -51,6 +52,8 @@ const Unauthorized = () => {
   );
 };
 
+=======
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
 const TitleUpdater = () => {
   const location = useLocation();
 
@@ -102,7 +105,11 @@ export const AppRoutes = () => {
         <Route
           path="/dashboard"
           element={
+<<<<<<< HEAD
             <ProtectedRoute allowedRoles={['CITIZEN', 'OFFICER', 'ADMIN']}>
+=======
+            <ProtectedRoute>
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
               <DashboardLayout>
                 <Dashboard />
               </DashboardLayout>
@@ -113,7 +120,11 @@ export const AppRoutes = () => {
         <Route
           path="/complaint/register"
           element={
+<<<<<<< HEAD
             <ProtectedRoute allowedRoles={['CITIZEN']}>
+=======
+            <ProtectedRoute>
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
               <DashboardLayout>
                 <ComplaintRegistration />
               </DashboardLayout>
@@ -124,7 +135,11 @@ export const AppRoutes = () => {
         <Route
           path="/complaint/track"
           element={
+<<<<<<< HEAD
             <ProtectedRoute allowedRoles={['CITIZEN', 'OFFICER']}>
+=======
+            <ProtectedRoute>
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
               <DashboardLayout>
                 <ComplaintTracking />
               </DashboardLayout>
@@ -135,7 +150,11 @@ export const AppRoutes = () => {
         <Route
           path="/complaint/history"
           element={
+<<<<<<< HEAD
             <ProtectedRoute allowedRoles={['CITIZEN', 'OFFICER', 'ADMIN']}>
+=======
+            <ProtectedRoute>
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
               <DashboardLayout>
                 <ComplaintHistory />
               </DashboardLayout>
@@ -146,7 +165,11 @@ export const AppRoutes = () => {
         <Route
           path="/feedback"
           element={
+<<<<<<< HEAD
             <ProtectedRoute allowedRoles={['CITIZEN']}>
+=======
+            <ProtectedRoute>
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
               <DashboardLayout>
                 <Feedback />
               </DashboardLayout>
@@ -157,7 +180,11 @@ export const AppRoutes = () => {
         <Route
           path="/profile"
           element={
+<<<<<<< HEAD
             <ProtectedRoute allowedRoles={['CITIZEN', 'OFFICER', 'ADMIN']}>
+=======
+            <ProtectedRoute>
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
               <DashboardLayout>
                 <MyProfile />
               </DashboardLayout>
@@ -168,6 +195,7 @@ export const AppRoutes = () => {
         <Route
           path="/settings"
           element={
+<<<<<<< HEAD
             <ProtectedRoute allowedRoles={['CITIZEN', 'OFFICER', 'ADMIN']}>
               <DashboardLayout>
                 <Settings />
@@ -182,6 +210,11 @@ export const AppRoutes = () => {
             <ProtectedRoute>
               <DashboardLayout>
                 <Unauthorized />
+=======
+            <ProtectedRoute>
+              <DashboardLayout>
+                <Settings />
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
               </DashboardLayout>
             </ProtectedRoute>
           }

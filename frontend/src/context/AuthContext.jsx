@@ -19,10 +19,17 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('citizen_portal_token'));
   const [loading, setLoading] = useState(false);
 
+<<<<<<< HEAD
   const login = async (email, password, username = 'CITIZEN') => {
     setLoading(true);
     try {
       const response = await api.login(email, password, username);
+=======
+  const login = async (email, password, role = 'CITIZEN') => {
+    setLoading(true);
+    try {
+      const response = await api.login(email, password, role);
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
       setUser(response.user);
       setToken(response.token);
       localStorage.setItem('citizen_portal_user', JSON.stringify(response.user));
@@ -51,7 +58,11 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (profileData) => {
     setLoading(true);
     try {
+<<<<<<< HEAD
       const updatedUser = await api.updateProfile(user.username || user.id, profileData);
+=======
+      const updatedUser = await api.updateProfile(user.id, profileData);
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
       const mergedUser = { ...user, ...updatedUser };
       setUser(mergedUser);
       localStorage.setItem('citizen_portal_user', JSON.stringify(mergedUser));
@@ -63,6 +74,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+<<<<<<< HEAD
   const logout = async () => {
     try {
       await api.logout();
@@ -74,6 +86,13 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('citizen_portal_user');
       localStorage.removeItem('citizen_portal_token');
     }
+=======
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('citizen_portal_user');
+    localStorage.removeItem('citizen_portal_token');
+>>>>>>> 82b3a534c20e8b88c3d10f0fc7cbb456e4a3361c
   };
 
   return (
