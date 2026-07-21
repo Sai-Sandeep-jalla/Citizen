@@ -1,4 +1,4 @@
-package com.citizenportal.entity;
+package com.otpservices.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -11,14 +11,16 @@ public class UserOtp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String otp;
 
-    @Column(name = "expiry_time")
+    @Column(name = "expiry_time", nullable = false)
     private LocalDateTime expiryTime;
 
+    @Column(nullable = false)
     private boolean verified;
 
     public UserOtp() {

@@ -1,6 +1,6 @@
-package com.citizenportal.repository;
+package com.otpservices.repository;
 
-import com.citizenportal.entity.UserOtp;
+import com.otpservices.entity.UserOtp;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

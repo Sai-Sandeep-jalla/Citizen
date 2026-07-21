@@ -1,26 +1,29 @@
-package com.citizenportal.entity;
+package com.otpservices.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
-   private boolean verified;
+    @Column(nullable = false)
+    private boolean verified;
 
     public User() {
     }
@@ -56,19 +59,20 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getPhoneNumber() {
-    return phoneNumber;
-}
+        return phoneNumber;
+    }
 
-public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-}
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-public boolean isVerified() {
-    return verified;
-}
+    public boolean isVerified() {
+        return verified;
+    }
 
-public void setVerified(boolean verified) {
-    this.verified = verified;
-}
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
 }
