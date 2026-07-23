@@ -1,3 +1,8 @@
+/**
+ * @file Settings.jsx
+ * @description Page component for application settings, such as notification preferences.
+ */
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../hooks/useAuth';
@@ -20,6 +25,23 @@ export const Settings = () => {
   const INDIAN_STATES = metadata?.INDIAN_STATES || [];
   const STATES_AND_DISTRICTS = metadata?.STATES_AND_DISTRICTS || {};
 
+  const [notificationPrefs, setNotificationPrefs] = useState(() => {
+    try {
+      const saved = localStorage.getItem('gp_notification_prefs');
+      if (saved) return JSON.parse(saved);
+    } catch(e){}
+    return { email: true, sms: true, push: false, schemes: false };
+  });
+
+  const handlePrefChange = (key) => {
+    setNotificationPrefs(prev => {
+      const updated = { ...prev, [key]: !prev[key] };
+      localStorage.setItem('gp_notification_prefs', JSON.stringify(updated));
+      toast.success(t('saving') ? 'Preferences saved' : 'Notification preferences saved!', { id: 'pref-toast' });
+      return updated;
+    });
+  };
+
   const {
     register,
     handleSubmit,
@@ -27,7 +49,7 @@ export const Settings = () => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      name: user?.name || '',
+      name: user?.name || user?.userName || '',
       email: user?.email || '',
       mobile: user?.mobile || '',
       state: user?.state || '',
@@ -43,10 +65,11 @@ export const Settings = () => {
   const onSubmitProfile = async (data) => {
     setLoading(true);
     try {
-      await updateProfile(data);
-      toast.success('Profile details updated successfully!');
-    } catch {
-      toast.error('Failed to update profile details.');
+      const result = await updateProfile(data);
+      if (result?.message) toast.success(result.message);
+    } catch (err) {
+      const backendMessage = err.response?.data?.message || err.message;
+      if (backendMessage) toast.error(backendMessage);
     } finally {
       setLoading(false);
     }
@@ -70,12 +93,11 @@ export const Settings = () => {
         
         {/* Left Side: Tabs Navigation */}
         <div className="md:col-span-1">
-          <Card hoverEffect={false} className="p-4 space-y-2 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/40">
+          <Card hoverEffect={false} className="p-2 sm:p-4 flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-2 md:gap-0 md:space-y-2 rounded-3xl border border-gray-100 shadow-xl shadow-gray-200/40 hide-scrollbar">
 
             <button
               onClick={() => setActiveTab('profile')}
-              className={`
-                w-full text-left px-4 py-3 text-sm font-bold rounded-xl flex items-center space-x-3 transition-all duration-300
+              className={`flex-shrink-0 md:w-full text-left px-4 py-3 text-sm font-bold rounded-xl flex items-center space-x-3 transition-all duration-300
                 ${activeTab === 'profile' ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md transform scale-[1.02]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}
               `}
             >
@@ -85,8 +107,7 @@ export const Settings = () => {
             
             <button
               onClick={() => setActiveTab('notifications')}
-              className={`
-                w-full text-left px-4 py-3 text-sm font-bold rounded-xl flex items-center space-x-3 transition-all duration-300
+              className={`flex-shrink-0 md:w-full text-left px-4 py-3 text-sm font-bold rounded-xl flex items-center space-x-3 transition-all duration-300
                 ${activeTab === 'notifications' ? 'bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md transform scale-[1.02]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}
               `}
             >
@@ -114,7 +135,7 @@ export const Settings = () => {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 pb-4 border-b border-gray-50">
                   <div className="relative group">
                     <img
-                      src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || ' ')}&background=F97316&color=fff&size=128`}
+                      src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || user?.userName || ' ')}&background=F97316&color=fff&size=128`}
                       alt="avatar preview"
                       className="w-20 h-20 rounded-full object-cover ring-4 ring-blue-50 shadow-md transition-all duration-300 group-hover:ring-blue-100"
                     />
@@ -231,7 +252,7 @@ export const Settings = () => {
                     <p className="text-sm font-bold text-gray-900">{t('emailAlerts') || 'Email Alerts'}</p>
                     <p className="text-xs font-medium text-gray-500">{t('emailAlertsDesc') || 'Receive email notification when your complaint changes stage.'}</p>
                   </div>
-                  <input type="checkbox" defaultChecked className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
+                  <input type="checkbox" checked={notificationPrefs.email} onChange={() => handlePrefChange('email')} className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
                 </div>
 
                 <div className="flex items-start justify-between pb-4 border-b border-gray-50 group hover:bg-gray-50/50 p-2 rounded-xl transition-colors">
@@ -239,7 +260,15 @@ export const Settings = () => {
                     <p className="text-sm font-bold text-gray-900">{t('smsAlerts') || 'SMS Alerts'}</p>
                     <p className="text-xs font-medium text-gray-500">{t('smsAlertsDesc') || 'Receive instant text updates on your registered mobile number.'}</p>
                   </div>
-                  <input type="checkbox" defaultChecked className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
+                  <input type="checkbox" checked={notificationPrefs.sms} onChange={() => handlePrefChange('sms')} className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
+                </div>
+
+                <div className="flex items-start justify-between pb-4 border-b border-gray-50 group hover:bg-gray-50/50 p-2 rounded-xl transition-colors">
+                  <div className="space-y-1">
+                    <p className="text-sm font-bold text-gray-900">{t('pushAlerts') || 'Push Notifications'}</p>
+                    <p className="text-xs font-medium text-gray-500">{t('pushAlertsDesc') || 'Receive desktop or mobile push notifications for real-time updates.'}</p>
+                  </div>
+                  <input type="checkbox" checked={notificationPrefs.push} onChange={() => handlePrefChange('push')} className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
                 </div>
 
                 <div className="flex items-start justify-between group hover:bg-gray-50/50 p-2 rounded-xl transition-colors">
@@ -247,7 +276,7 @@ export const Settings = () => {
                     <p className="text-sm font-bold text-gray-900">{t('govSchemeAnnouncements') || 'Government Scheme Announcements'}</p>
                     <p className="text-xs font-medium text-gray-500">{t('govSchemeAnnouncementsDesc') || 'Receive alerts when new schemes are rolled out in your district.'}</p>
                   </div>
-                  <input type="checkbox" className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
+                  <input type="checkbox" checked={notificationPrefs.schemes} onChange={() => handlePrefChange('schemes')} className="rounded-md border-gray-300 text-blue-600 focus:ring-blue-600 h-5 w-5 cursor-pointer mt-1 transition-all" />
                 </div>
               </div>
             </Card>

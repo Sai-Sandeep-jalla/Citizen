@@ -1,3 +1,8 @@
+/**
+ * @file translationService.js
+ * @description Service module responsible for loading and managing translation resources.
+ */
+
 export async function translateObject(object, targetLang) {
     if (targetLang === "en") return object;
 

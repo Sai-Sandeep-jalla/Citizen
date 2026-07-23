@@ -1,3 +1,8 @@
+/**
+ * @file MetadataContext.jsx
+ * @description React Context provider for managing global application metadata.
+ */
+
 import { createContext, useState, useEffect } from 'react';
 import { api } from '../services/api';
 

@@ -1,3 +1,8 @@
+/**
+ * @file Stepper.jsx
+ * @description Stepper component for guiding users through multi-step forms or processes.
+ */
+
 import { Fragment } from 'react';
 import { Check, AlertCircle, Clock, Send, Hammer, CheckCircle2, Lock } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';

@@ -1,3 +1,8 @@
+/**
+ * @file Feedback.jsx
+ * @description Page component for users to submit general feedback or system suggestions.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
@@ -51,8 +56,9 @@ export const Feedback = () => {
       // Filter feedbacks submitted by this user (or name for dummy matching)
       const userFbs = fbList.filter(f => f.citizenName === user.name || f.citizenName === 'Anonymous Citizen');
       setFeedbacks(userFbs);
-    } catch {
-      toast.error('Failed to load feedback resources.');
+    } catch (err) {
+      const backendMessage = err.response?.data?.message || err.message;
+      if (backendMessage) toast.error(backendMessage);
     } finally {
       setLoading(false);
     }
@@ -94,11 +100,12 @@ export const Feedback = () => {
         citizenName: selectedComp.anonymous ? 'Anonymous Citizen' : user.name
       };
 
-      await api.submitFeedback(feedbackPayload);
+      const result = await api.submitFeedback(feedbackPayload);
       setThankYouOpen(true);
-      toast.success('Thank you for your valuable feedback!');
-    } catch {
-      toast.error('Failed to submit feedback.');
+      if (result?.message) toast.success(result.message);
+    } catch (err) {
+      const backendMessage = err.response?.data?.message || err.message;
+      if (backendMessage) toast.error(backendMessage);
     } finally {
       setSubmitLoading(false);
     }

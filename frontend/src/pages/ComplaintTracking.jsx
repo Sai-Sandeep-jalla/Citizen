@@ -1,3 +1,8 @@
+/**
+ * @file ComplaintTracking.jsx
+ * @description Page component allowing users to track the status of a specific complaint.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
@@ -60,7 +65,8 @@ export const ComplaintTracking = () => {
       }
     } catch (err) {
       setComplaint(null);
-      toast.error(err.message || 'Error tracking complaint.');
+      const backendMessage = err.response?.data?.message || err.message;
+      if (backendMessage) toast.error(backendMessage);
     } finally {
       setLoading(false);
     }
@@ -184,14 +190,14 @@ export const ComplaintTracking = () => {
               </div>
 
               {/* General Complaint fields */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                {/* Col 1 & 2: Details */}
-                <div className="md:col-span-2 space-y-4">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Complaint Title</span>
-                    <h3 className="text-base font-bold text-gray-900 dark:text-white leading-tight">{complaint.title}</h3>
-                  </div>
+              <div className="p-5">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Col 1 & 2: Details */}
+                  <div className="lg:col-span-2 space-y-4">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Complaint Title</span>
+                      <h3 className="text-base font-bold text-gray-900 dark:text-white leading-tight">{complaint.title}</h3>
+                    </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
@@ -260,6 +266,7 @@ export const ComplaintTracking = () => {
                   </div>
                 </div>
 
+              </div>
               </div>
 
               {/* Attachments Section */}

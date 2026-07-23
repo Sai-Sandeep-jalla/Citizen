@@ -1,3 +1,8 @@
+/**
+ * @file Register.jsx
+ * @description Page component for new user registration.
+ */
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
@@ -17,21 +22,24 @@ export const Register = () => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm();
+  } = useForm({
+    defaultValues: { role: '' }
+  });
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await authRegister(
-        data.name,
-        data.email,
-        data.mobile,
-        data.password
+      const response = await authRegister(
+        data.userName,
+        data.emailId,
+        data.phoneNumber,
+        data.password,
+        'Citizen'
       );
-      toast.success('Registration successful! Please log in to continue.');
+      if (response?.message) toast.success(response.message);
       navigate('/login');
     } catch (err) {
-      toast.error(err.message || 'Registration failed.');
+      if (err.message) toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -40,21 +48,21 @@ export const Register = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Input
-        label={t('fullName')}
-        name="name"
-        placeholder={t('enterFullName')}
-        error={errors.name}
-        {...register('name', { required: 'Full Name is required' })}
+        label={t('userName')}
+        name="userName"
+        placeholder={t('enterUserName')}
+        error={errors.userName}
+        {...register('userName', { required: 'User Name is required' })}
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label={t('emailLabel')}
-          name="email"
+          name="emailId"
           type="email"
           placeholder="example@email.com"
-          error={errors.email}
-          {...register('email', { 
+          error={errors.emailId}
+          {...register('emailId', { 
             required: 'Email is required',
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -64,14 +72,14 @@ export const Register = () => {
         />
         <Input
           label={t('mobileLabel')}
-          name="mobile"
-          placeholder={t('mobilePlaceholder')}
-          error={errors.mobile}
-          {...register('mobile', { 
-            required: 'Mobile is required',
+          name="phoneNumber"
+          placeholder={t('enterPhoneNumber')}
+          error={errors.phoneNumber}
+          {...register('phoneNumber', { 
+            required: 'Phone Number is required',
             pattern: {
               value: /^[0-9]{10}$/,
-              message: 'Mobile number must be exactly 10 digits'
+              message: 'Phone number must be exactly 10 digits'
             }
           })}
         />
@@ -88,6 +96,7 @@ export const Register = () => {
           minLength: { value: 6, message: 'Password must be at least 6 characters long' }
         })}
       />
+
 
       <Button
         type="submit"

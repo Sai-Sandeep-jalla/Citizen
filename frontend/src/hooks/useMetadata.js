@@ -1,3 +1,8 @@
+/**
+ * @file useMetadata.js
+ * @description Custom hook providing access to the application metadata context.
+ */
+
 import { useContext } from 'react';
 import { MetadataContext } from '../context/MetadataContext';
 

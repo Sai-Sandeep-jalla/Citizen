@@ -1,3 +1,8 @@
+/**
+ * @file Table.jsx
+ * @description Reusable table component for displaying tabular data.
+ */
+
 
 export const Table = ({
   headers = [],

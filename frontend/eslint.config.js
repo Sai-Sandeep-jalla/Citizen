@@ -1,3 +1,8 @@
+/**
+ * @file eslint.config.js
+ * @description ESLint configuration file defining coding standards and linting rules for the project.
+ */
+
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'

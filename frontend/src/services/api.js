@@ -1,10 +1,15 @@
+/**
+ * @file api.js
+ * @description API service module containing configurations and interceptors for HTTP requests.
+ */
+
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://api.citizenportal.gov.in';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 1500, // Reduced from 5000ms so offline backend falls back faster
+  timeout: 10000, // Increased timeout for real backend requests
   headers: {
     'Content-Type': 'application/json',
   },
@@ -31,6 +36,12 @@ apiClient.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       // Handle unauthorized session expiration
       console.warn('Session expired. Redirecting to login...');
+      localStorage.removeItem('citizen_portal_user');
+      localStorage.removeItem('citizen_portal_token');
+      // Only redirect if not already on the login page to prevent redirect loops
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
@@ -95,9 +106,14 @@ export const api = {
   },
 
   // 4. Auth & User API
-  login: async (email, password, username = 'CITIZEN') => {
-    const response = await apiClient.post('/api/users/login', { email, password, username });
-    return response.data; // expects { user, token }
+  login: async (role, userName, password, loginType) => {
+    const response = await axios.post('/login-services/api/v1/user/login', {
+      role,
+      userName,
+      password,
+      loginType
+    }, { timeout: 5000 });
+    return response;
   },
 
   logout: async () => {
@@ -106,8 +122,8 @@ export const api = {
   },
 
   register: async (userData) => {
-    const response = await apiClient.post('/api/users/register', userData);
-    return response.data;
+    const response = await axios.post('/login-services/api/v1/user/signup', userData);
+    return response;
   },
 
   sendOtp: async (data) => {

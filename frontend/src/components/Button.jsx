@@ -1,3 +1,8 @@
+/**
+ * @file Button.jsx
+ * @description Reusable button component with various styles, sizes, and loading states.
+ */
+
 import { Loader2 } from 'lucide-react';
 
 export const Button = ({

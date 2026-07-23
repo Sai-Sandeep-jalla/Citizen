@@ -1,3 +1,8 @@
+/**
+ * @file Loader.jsx
+ * @description Loading indicator component used during asynchronous operations.
+ */
+
 import { Loader2 } from 'lucide-react';
 
 export const Loader = ({ message = 'Loading, please wait...' }) => {

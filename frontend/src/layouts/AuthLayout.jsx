@@ -1,3 +1,8 @@
+/**
+ * @file AuthLayout.jsx
+ * @description Layout component wrapping authentication-related pages (Login, Register).
+ */
+
 import { Shield, Globe, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 

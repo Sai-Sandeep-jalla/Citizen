@@ -1,3 +1,8 @@
+/**
+ * @file Card.jsx
+ * @description Reusable card component for displaying grouped content or items.
+ */
+
 
 export const Card = ({
   children,

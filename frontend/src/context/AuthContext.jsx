@@ -1,3 +1,8 @@
+/**
+ * @file AuthContext.jsx
+ * @description React Context provider managing user authentication state and methods.
+ */
+
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect } from 'react';
 import { api } from '../services/api';
@@ -19,32 +24,70 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('citizen_portal_token'));
   const [loading, setLoading] = useState(false);
 
-  const login = async (email, password, username = 'CITIZEN') => {
+  // Authenticate credentials but DO NOT log the user in yet (for 2FA)
+  const authenticateCredentials = async (emailOrMobile, password, role = 'CITIZEN') => {
     setLoading(true);
     try {
-      const response = await api.login(email, password, username);
-      setUser(response.user);
-      setToken(response.token);
-      localStorage.setItem('citizen_portal_user', JSON.stringify(response.user));
-      localStorage.setItem('citizen_portal_token', response.token);
+      const formattedRole = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+      let responseData, authToken;
+      
+      const response = await api.login(formattedRole, emailOrMobile, password, 'email_id');
+      responseData = response.data || {};
+      authToken = responseData.token || response.token || response.accessToken || responseData.accessToken || responseData.data?.token || responseData.data?.accessToken || responseData.jwt || responseData.data?.jwt || response.headers?.authorization?.replace('Bearer ', '');
+
+      if (!authToken) {
+        throw new Error("No authentication token received from server");
+      }
+
+      const localSavedName = localStorage.getItem('demo_registered_name_' + emailOrMobile);
+      const baseFallback = emailOrMobile.includes('@') ? emailOrMobile.split('@')[0] : emailOrMobile;
+      const apiName = responseData.UserName || responseData.userName || responseData.name || responseData.username || responseData.data?.userName || responseData.data?.UserName || responseData.data?.username || responseData.data?.name || responseData.user?.name || responseData.user?.userName;
+      const extractedName = apiName || localSavedName || baseFallback;
+      const loggedInUser = { email: emailOrMobile, role: formattedRole, userName: extractedName, ...responseData };
       setLoading(false);
-      return response.user;
+      return { loggedInUser, authToken, message: responseData.message || responseData.data?.message };
     } catch (error) {
       setLoading(false);
-      throw error;
+      const errorMessage = error.response?.data?.message || error.message || 'Login failed';
+      throw new Error(errorMessage);
     }
   };
 
-  const register = async (name, email, mobile, password, state, district, pincode) => {
+  // Finalize the login process and save to local storage
+  const finalizeLogin = (loggedInUser, authToken) => {
+    setUser(loggedInUser);
+    setToken(authToken);
+    localStorage.setItem('citizen_portal_user', JSON.stringify(loggedInUser));
+    localStorage.setItem('citizen_portal_token', authToken);
+  };
+
+  // Old login function for backwards compatibility (used where 2FA isn't needed)
+  const login = async (email, password, role = 'CITIZEN') => {
+    const { loggedInUser, authToken, message } = await authenticateCredentials(email, password, role);
+    finalizeLogin(loggedInUser, authToken);
+    return { ...loggedInUser, message };
+  };
+
+  const requestOtp = async (data) => {
+    return await api.sendOtp(data);
+  };
+
+  const verifyOtp = async (data) => {
+    return await api.verifyOtp(data);
+  };
+
+  const register = async (userName, emailId, phoneNumber, password, role, address) => {
     setLoading(true);
     try {
-      const userData = { name, email, mobile, password, state: state || 'Delhi', district: district || 'New Delhi', pincode: pincode || '110001' };
-      const newUser = await api.register(userData);
+      const userData = { userName, emailId, phoneNumber, password, role, address };
+      let response;
+      response = await api.register(userData);
       setLoading(false);
-      return newUser;
+      return response.data || response;
     } catch (error) {
       setLoading(false);
-      throw error;
+      const errorMessage = error.response?.data?.message || error.message || 'Registration failed';
+      throw new Error(errorMessage);
     }
   };
 
@@ -64,20 +107,33 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    try {
-      await api.logout();
-    } catch (error) {
-      console.warn('Backend logout failed, proceeding with local logout', error);
-    } finally {
-      setUser(null);
-      setToken(null);
-      localStorage.removeItem('citizen_portal_user');
-      localStorage.removeItem('citizen_portal_token');
-    }
+    // Clear local state instantly for an immediate UI response
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('citizen_portal_user');
+    localStorage.removeItem('citizen_portal_token');
+
+    // Attempt backend logout asynchronously without blocking the user
+    api.logout().catch(error => {
+      console.warn('Backend logout failed or offline.', error);
+    });
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, updateProfile, logout, isAuthenticated: !!token }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      token, 
+      loading, 
+      login, 
+      authenticateCredentials,
+      finalizeLogin,
+      requestOtp,
+      verifyOtp,
+      register, 
+      updateProfile, 
+      logout, 
+      isAuthenticated: !!token 
+    }}>
       {children}
     </AuthContext.Provider>
   );

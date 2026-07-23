@@ -1,3 +1,8 @@
+/**
+ * @file App.jsx
+ * @description Root React component wrapping the application with necessary context providers and routing.
+ */
+
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';

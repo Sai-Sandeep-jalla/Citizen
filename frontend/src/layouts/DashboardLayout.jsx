@@ -1,3 +1,8 @@
+/**
+ * @file DashboardLayout.jsx
+ * @description Main application layout wrapping authenticated pages, containing a sidebar and header.
+ */
+
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -15,7 +20,9 @@ import {
   ChevronDown,
   FileText,
   User,
-  Settings
+  Settings,
+  Bell,
+  Check
 } from 'lucide-react';
 
 export const DashboardLayout = ({ children }) => {
@@ -28,11 +35,41 @@ export const DashboardLayout = ({ children }) => {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
 
-  // Close profile dropdown when clicking outside
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationsRef = useRef(null);
+
+  const userRole = (user?.role || user?.username || 'CITIZEN').toUpperCase();
+  const isOfficer = userRole === 'OFFICER' || userRole === 'ADMIN' || userRole === 'DEPT';
+
+  const [notifications, setNotifications] = useState(() => {
+    if (isOfficer) {
+      return [
+        { id: 1, title: 'New Grievance Assigned', message: 'A new high-priority grievance #882 has been assigned to your department.', isRead: false, time: '5 mins ago' },
+        { id: 2, title: 'SLA Breach Warning', message: 'Grievance #710 is approaching its SLA deadline.', isRead: false, time: '1 hour ago' },
+        { id: 3, title: 'System Update', message: 'The portal will be down for maintenance tonight.', isRead: true, time: '2 days ago' },
+      ];
+    }
+    return [
+      { id: 1, title: 'Complaint Updated', message: 'Your grievance #1002 has been marked as IN PROGRESS.', isRead: false, time: '10 mins ago' },
+      { id: 2, title: 'New Government Scheme', message: 'A new housing scheme is available in your district.', isRead: false, time: '2 hours ago' },
+      { id: 3, title: 'System Alert', message: 'Scheduled maintenance this Sunday at 2 AM.', isRead: true, time: '1 day ago' },
+    ];
+  });
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, isRead: true })));
+  };
+
+  // Close profile and notification dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setProfileOpen(false);
+      }
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+        setNotificationsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -65,13 +102,23 @@ export const DashboardLayout = ({ children }) => {
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
-  const menuItems = [
+
+  const citizenMenuItems = [
     { path: '/dashboard', label: t('citizenDashboard') || 'Citizen Dashboard', icon: LayoutDashboard },
     { path: '/complaint/register', label: t('registerGrievance') || 'Register Grievance', icon: FilePlus },
     { path: '/complaint/track', label: t('trackGrievance') || 'Track Grievance', icon: Search },
     { path: '/complaint/history', label: t('grievanceHistory') || 'Grievance History', icon: FileText, count: counts.total },
     { path: '/feedback', label: t('feedbackRatings') || 'Feedback & Ratings', icon: MessageSquare }
   ];
+
+  const officerMenuItems = [
+    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/dashboard#complaints', label: 'Complaint Management', icon: FilePlus },
+    { path: '/dashboard#assignment', label: 'Assignment', icon: User },
+    { path: '/dashboard#reports', label: 'Reports', icon: FileText }
+  ];
+
+  const menuItems = isOfficer ? officerMenuItems : citizenMenuItems;
 
   const handleLogout = async () => {
     await logout();
@@ -83,8 +130,8 @@ export const DashboardLayout = ({ children }) => {
       {menuItems.map((item) => {
         const Icon = item.icon;
         const isActive =
-          location.pathname === item.path ||
-          (item.path === '/dashboard' && location.pathname === '/');
+          location.pathname + location.hash === item.path ||
+          (item.path === '/dashboard' && location.pathname === '/dashboard' && location.hash === '');
         return (
           <Link
             key={item.path}
@@ -186,13 +233,13 @@ export const DashboardLayout = ({ children }) => {
               <span className="bg-[#F97316] text-white text-[9px] font-black tracking-wider px-1.5 py-0.5 rounded mr-2.5">
                 {t('GovtPortal') || 'GOVT PORTAL'}
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-blue-200">
+              <span className="text-[10px] sm:text-xs font-semibold text-blue-200 truncate w-40 sm:w-auto hidden sm:inline">
                 {t('citizenGrievanceManagement') || 'Citizen Grievance Management & Redressal SLA Portal'}
               </span>
             </div>
             <div className="flex items-center space-x-4">
               {/* Live SLA indicator */}
-              <div className="flex items-center space-x-1.5 relative">
+              <div className="hidden sm:flex items-center space-x-1.5 relative">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping"></span>
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full absolute"></span>
                 <span className="text-[10px] text-green-400 font-bold tracking-wide uppercase ml-2.5">
@@ -270,6 +317,56 @@ export const DashboardLayout = ({ children }) => {
                 </div>
               </div>
 
+              {/* Notification Bell / Dropdown */}
+              <div className="relative" ref={notificationsRef}>
+                <button
+                  onClick={() => setNotificationsOpen(!notificationsOpen)}
+                  className="relative p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors focus:outline-none"
+                >
+                  <Bell className="w-5 h-5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                  )}
+                </button>
+
+                {/* Notifications Dropdown */}
+                {notificationsOpen && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="px-4 py-3 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
+                      <h3 className="text-sm font-black text-[#0B1E47]">Notifications</h3>
+                      {unreadCount > 0 && (
+                        <button onClick={markAllAsRead} className="text-[10px] font-bold text-blue-600 hover:underline flex items-center">
+                          <Check className="w-3 h-3 mr-1" />
+                          Mark all as read
+                        </button>
+                      )}
+                    </div>
+                    <div className="max-h-72 overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        notifications.map((notif) => (
+                          <div key={notif.id} className={`px-4 py-3 border-b border-gray-50 hover:bg-gray-50 transition-colors ${!notif.isRead ? 'bg-blue-50/30' : ''}`}>
+                            <div className="flex justify-between items-start mb-1">
+                              <p className={`text-xs font-bold ${!notif.isRead ? 'text-[#0B1E47]' : 'text-gray-700'}`}>{notif.title}</p>
+                              <span className="text-[9px] font-bold text-gray-400">{notif.time}</span>
+                            </div>
+                            <p className="text-[11px] text-gray-500 leading-snug">{notif.message}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="px-4 py-6 text-center text-sm font-medium text-gray-500">
+                          No notifications available.
+                        </div>
+                      )}
+                    </div>
+                    <div className="px-4 py-2 border-t border-gray-50 bg-gray-50/50 text-center">
+                      <Link to="/dashboard" onClick={() => setNotificationsOpen(false)} className="text-[11px] font-bold text-blue-600 hover:underline">
+                        View All History
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Profile Card / Dropdown */}
               <div className="relative border-l border-gray-150 pl-3" ref={profileRef}>
                 <button
@@ -277,14 +374,14 @@ export const DashboardLayout = ({ children }) => {
                   className="flex items-center space-x-2 focus:outline-none hover:bg-gray-50 p-1 rounded-lg transition-colors"
                 >
                   <img
-                    src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || ' ')}&background=F97316&color=fff`}
+                    src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || user?.userName || ' ')}&background=F97316&color=fff`}
                     alt="User avatar"
                     className="w-8 h-8 rounded-full object-cover ring-2 ring-[#EFF6FF]"
                   />
                   <div className="hidden sm:flex items-center space-x-1 leading-tight text-left">
                     <div>
-                      <p className="text-xs font-black text-[#0B1E47] truncate w-24">{user?.name}</p>
-                      <p className="text-[9px] text-gray-450 font-bold uppercase">{t('citizenAccount') || 'Citizen Account'}</p>
+                      <p className="text-xs font-black text-[#0B1E47] truncate w-24">{user?.data?.userName || user?.data?.name || user?.user?.name || user?.name || user?.userName}</p>
+                      <p className="text-[9px] text-gray-450 font-bold uppercase">{isOfficer ? 'DEPT ACCOUNT' : (t('citizenAccount') || 'Citizen Account')}</p>
                     </div>
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
                   </div>
@@ -294,7 +391,7 @@ export const DashboardLayout = ({ children }) => {
                 {profileOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50">
                     <div className="px-4 py-2 border-b border-gray-100 sm:hidden">
-                      <p className="text-sm font-bold text-gray-800 truncate">{user?.name}</p>
+                      <p className="text-sm font-bold text-gray-800 truncate">{user?.data?.userName || user?.data?.name || user?.user?.name || user?.name || user?.userName}</p>
                     </div>
                     <Link
                       to="/profile"

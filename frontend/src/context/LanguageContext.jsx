@@ -1,3 +1,8 @@
+/**
+ * @file LanguageContext.jsx
+ * @description React Context provider managing application language and translations.
+ */
+
 import { createContext, useState, useEffect } from "react";
 import english from "../locales/en.json";
 import { translateObject } from "../services/translationService";
@@ -6,22 +11,18 @@ const SUPPORTED_LANGUAGES = [
   { code: 'en', label: 'English' },
   { code: 'as', label: 'Assamese/অসমীয়া' },
   { code: 'bn', label: 'Bengali/বাংলা' },
-  { code: 'brx', label: 'Bodo/बड़ो' },
   { code: 'doi', label: 'Dogri/डोगरी' },
   { code: 'gu', label: 'Gujarati/ગુજરાતી' },
   { code: 'hi', label: 'Hindi/हिंदी' },
   { code: 'kn', label: 'Kannada/ಕನ್ನಡ' },
-  { code: 'ks', label: 'Kashmiri/कॉशुर' },
   { code: 'kok', label: 'Konkani/कोंकणी' },
   { code: 'mai', label: 'Maithili/मैथिली' },
   { code: 'ml', label: 'Malayalam/മലയാളം' },
-  { code: 'mni', label: 'Manipuri/মৈতৈলোন্' },
   { code: 'mr', label: 'Marathi/मराठी' },
   { code: 'ne', label: 'Nepali/नेपाली' },
   { code: 'or', label: 'Odia/ଓଡ଼ିଆ' },
   { code: 'pa', label: 'Punjabi/ਪੰਜਾਬੀ' },
   { code: 'sa', label: 'Sanskrit/संस्कृतम्' },
-  { code: 'sat', label: 'Santali/ᱥᱟᱱᱛᱟᱲᱤ' },
   { code: 'sd', label: 'Sindhi/سنڌي' },
   { code: 'ta', label: 'Tamil/தமிழ்' },
   { code: 'te', label: 'Telugu/తెలుగు' },

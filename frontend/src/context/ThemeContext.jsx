@@ -1,3 +1,8 @@
+/**
+ * @file ThemeContext.jsx
+ * @description React Context provider managing the light/dark theme preference.
+ */
+
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect } from 'react';
 

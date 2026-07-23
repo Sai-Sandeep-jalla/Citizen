@@ -1,3 +1,8 @@
+/**
+ * @file ProtectedRoute.jsx
+ * @description Route wrapper component that ensures only authenticated users can access specific routes.
+ */
+
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { FullPageLoader } from '../components/Loader';
@@ -17,8 +22,11 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
 
   // Evaluate user role (support for standard 'role' or mapped 'username' from earlier change)
   const userRole = user?.role || user?.username || 'CITIZEN';
+  
+  let effectiveRole = userRole.toUpperCase();
+  if (effectiveRole === 'DEPT') effectiveRole = 'OFFICER';
 
-  if (isAuthenticated && allowedRoles && !allowedRoles.includes(userRole)) {
+  if (isAuthenticated && allowedRoles && !allowedRoles.map(r => r.toUpperCase()).includes(effectiveRole)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

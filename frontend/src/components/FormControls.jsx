@@ -1,3 +1,8 @@
+/**
+ * @file FormControls.jsx
+ * @description Collection of form input controls such as text inputs, textareas, and selects.
+ */
+
 import { forwardRef } from 'react';
 import { Search, X } from 'lucide-react';
 
@@ -100,7 +105,7 @@ export const Dropdown = forwardRef(({
           `}
           {...props}
         >
-          <option value="">{emptyOption}</option>
+          <option value="" disabled hidden>{emptyOption}</option>
           {options.map((opt, idx) => (
             <option key={idx} value={opt.value !== undefined ? opt.value : opt}>
               {opt.label !== undefined ? opt.label : opt}

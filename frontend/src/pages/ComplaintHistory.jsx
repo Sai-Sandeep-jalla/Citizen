@@ -1,3 +1,8 @@
+/**
+ * @file ComplaintHistory.jsx
+ * @description Page displaying the history of complaints filed by the user.
+ */
+
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
@@ -66,8 +71,9 @@ export const ComplaintHistory = () => {
       const queryParams = user?.role === 'CITIZEN' ? { citizenId: user.id } : {};
       const list = await api.getComplaints(queryParams);
       setComplaints(list);
-    } catch {
-      toast.error('Failed to load complaints logs.');
+    } catch (err) {
+      const backendMessage = err.response?.data?.message || err.message;
+      if (backendMessage) toast.error(backendMessage);
     } finally {
       setLoading(false);
     }
@@ -90,12 +96,13 @@ export const ComplaintHistory = () => {
   const handleDeleteConfirm = async () => {
     setActionLoading(true);
     try {
-      await api.deleteComplaint(selectedComplaint.id);
-      toast.success('Complaint draft deleted successfully.');
+      const result = await api.deleteComplaint(selectedComplaint.id);
+      if (result?.message) toast.success(result.message);
       setDeleteConfirmOpen(false);
       fetchComplaints();
-    } catch {
-      toast.error('Failed to delete complaint.');
+    } catch (err) {
+      const backendMessage = err.response?.data?.message || err.message;
+      if (backendMessage) toast.error(backendMessage);
     } finally {
       setActionLoading(false);
     }
@@ -118,15 +125,16 @@ export const ComplaintHistory = () => {
 
     setActionLoading(true);
     try {
-      await api.updateComplaint(selectedComplaint.id, {
+      const result = await api.updateComplaint(selectedComplaint.id, {
         status: 'ASSIGNED',
         comment: `Reopened by Citizen: ${reopenComment}`
       });
-      toast.success('Complaint reopened successfully.');
+      if (result?.message) toast.success(result.message);
       setReopenModalOpen(false);
       fetchComplaints();
-    } catch {
-      toast.error('Failed to reopen complaint.');
+    } catch (err) {
+      const backendMessage = err.response?.data?.message || err.message;
+      if (backendMessage) toast.error(backendMessage);
     } finally {
       setActionLoading(false);
     }
@@ -285,7 +293,6 @@ export const ComplaintHistory = () => {
               { value: 'ASSIGNED', label: 'Assigned' },
               { value: 'IN_PROGRESS', label: 'In Progress' },
               { value: 'RESOLVED', label: 'Resolved' },
-              { value: 'CLOSED', label: 'Closed' },
               { value: 'REJECTED', label: 'Rejected' }
             ]}
             value={statusFilter}
@@ -300,8 +307,7 @@ export const ComplaintHistory = () => {
               { value: 'ALL', label: 'All Priorities' },
               { value: 'LOW', label: 'Low' },
               { value: 'MEDIUM', label: 'Medium' },
-              { value: 'HIGH', label: 'High' },
-              { value: 'CRITICAL', label: 'Critical' }
+              { value: 'HIGH', label: 'High' }
             ]}
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
@@ -359,7 +365,6 @@ export const ComplaintHistory = () => {
                     { value: 'ASSIGNED', label: 'Assigned' },
                     { value: 'IN_PROGRESS', label: 'In Progress' },
                     { value: 'RESOLVED', label: 'Resolved' },
-                    { value: 'CLOSED', label: 'Closed' },
                     { value: 'REJECTED', label: 'Rejected' }
                   ]}
                   value={statusFilter}
@@ -373,8 +378,7 @@ export const ComplaintHistory = () => {
                     { value: 'ALL', label: 'All Priorities' },
                     { value: 'LOW', label: 'Low' },
                     { value: 'MEDIUM', label: 'Medium' },
-                    { value: 'HIGH', label: 'High' },
-                    { value: 'CRITICAL', label: 'Critical' }
+                    { value: 'HIGH', label: 'High' }
                   ]}
                   value={priorityFilter}
                   onChange={(e) => setPriorityFilter(e.target.value)}

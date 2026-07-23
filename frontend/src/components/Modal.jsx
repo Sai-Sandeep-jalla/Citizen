@@ -1,3 +1,8 @@
+/**
+ * @file Modal.jsx
+ * @description Reusable modal/dialog component for overlays and popups.
+ */
+
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';

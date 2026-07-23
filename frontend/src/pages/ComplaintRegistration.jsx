@@ -1,3 +1,8 @@
+/**
+ * @file ComplaintRegistration.jsx
+ * @description Page component containing the form to register a new complaint.
+ */
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -115,9 +120,10 @@ export const ComplaintRegistration = () => {
       const result = await api.createComplaint(complaintData, user);
       setGeneratedTicketId(result.id);
       setSuccessOpen(true);
-      toast.success('Complaint registered successfully!');
+      if (result?.message) toast.success(result.message);
     } catch (err) {
-      toast.error(err.message || 'Failed to submit complaint.');
+      const backendMessage = err.response?.data?.message || err.message;
+      if (backendMessage) toast.error(backendMessage);
     } finally {
       setLoading(false);
     }
@@ -157,10 +163,7 @@ export const ComplaintRegistration = () => {
               name="title"
               placeholder="Summary of the issue (e.g. Water leak in street 4)"
               error={errors.title}
-              {...register('title', { 
-                required: 'Complaint title is required',
-                minLength: { value: 10, message: 'Title must be at least 10 characters long' }
-              })}
+              {...register('title')}
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -170,7 +173,7 @@ export const ComplaintRegistration = () => {
                 options={COMPLAINT_CATEGORIES.map(c => ({ value: c.id, label: translate(c.id) || c.label }))}
                 emptyOption="Select Category"
                 error={errors.category}
-                {...register('category', { required: 'Category is required' })}
+                {...register('category')}
               />
 
               <Dropdown
@@ -178,7 +181,7 @@ export const ComplaintRegistration = () => {
                 name="priority"
                 options={PRIORITY_LEVELS.map(p => ({ value: p.id, label: p.label }))}
                 error={errors.priority}
-                {...register('priority', { required: 'Priority is required' })}
+                {...register('priority')}
               />
             </div>
 
@@ -187,10 +190,7 @@ export const ComplaintRegistration = () => {
               name="description"
               placeholder="Provide a detailed description of the grievance (dates, times, context, impact)..."
               error={errors.description}
-              {...register('description', { 
-                required: 'Description is required',
-                minLength: { value: 30, message: 'Please describe the issue in at least 30 characters' }
-              })}
+              {...register('description')}
             />
           </div>
 
@@ -227,7 +227,7 @@ export const ComplaintRegistration = () => {
               name="address"
               placeholder="House no, Street name, Sector/Block"
               error={errors.address}
-              {...register('address', { required: 'Address is required' })}
+              {...register('address')}
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -246,7 +246,7 @@ export const ComplaintRegistration = () => {
                 options={INDIAN_STATES.map(s => ({ value: s, label: s }))}
                 emptyOption="Select State"
                 error={errors.state}
-                {...register('state', { required: 'State is required' })}
+                {...register('state')}
               />
               <Dropdown
                 label={translate('district')}
@@ -255,7 +255,7 @@ export const ComplaintRegistration = () => {
                 emptyOption="Select District"
                 disabled={!watchedState}
                 error={errors.district}
-                {...register('district', { required: 'District is required' })}
+                {...register('district')}
               />
             </div>
 
@@ -266,10 +266,7 @@ export const ComplaintRegistration = () => {
                   name="pincode"
                   placeholder="6 digits"
                   error={errors.pincode}
-                  {...register('pincode', { 
-                    required: 'Pincode is required',
-                    pattern: { value: /^[0-9]{6}$/, message: 'Must be 6 digits' }
-                  })}
+                  {...register('pincode')}
                 />
               </div>
             </div>

@@ -1,3 +1,8 @@
+/**
+ * @file FileUpload.jsx
+ * @description Component handling file selection, drag-and-drop, and upload functionality.
+ */
+
 import { useRef, useState } from 'react';
 import { UploadCloud, File, Image, Film, X, Check } from 'lucide-react';
 

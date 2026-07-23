@@ -1,3 +1,8 @@
+/**
+ * @file MyProfile.jsx
+ * @description Page component allowing users to view and update their profile information.
+ */
+
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../hooks/useLanguage';
 import { Mail, Phone, MapPin, Calendar, User, Briefcase, ShieldCheck } from 'lucide-react';
@@ -48,7 +53,7 @@ export const MyProfile = () => {
                   <User className="w-8 h-8 text-white opacity-80" />
                 </div>
                 <img
-                  src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || ' ')}&background=F97316&color=fff&size=256`}
+                  src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || user?.userName || ' ')}&background=F97316&color=fff&size=256`}
                   alt="avatar"
                   className="w-36 h-36 sm:w-44 sm:h-44 rounded-full object-cover ring-[10px] ring-white shadow-2xl bg-white relative z-10"
                 />
@@ -56,7 +61,7 @@ export const MyProfile = () => {
               </div>
               
               <div className="text-center sm:text-left mb-3">
-                <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">{user?.name || 'Citizen User'}</h2>
+                <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">{user?.data?.userName || user?.data?.name || user?.user?.name || user?.name || user?.userName || 'Citizen User'}</h2>
                 <div className="flex items-center justify-center sm:justify-start space-x-3 mt-2">
                   <span className="px-3 py-1 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-xs font-bold rounded-full shadow-md">
                     {user?.role || 'CITIZEN'}

@@ -1,3 +1,8 @@
+/**
+ * @file Badge.jsx
+ * @description Reusable badge component for displaying small status tags or labels.
+ */
+
 import { useMetadata } from '../hooks/useMetadata';
 import { useLanguage } from '../hooks/useLanguage';
 

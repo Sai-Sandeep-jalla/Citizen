@@ -1,3 +1,8 @@
+/**
+ * @file Pagination.jsx
+ * @description Pagination component for navigating through large lists of data.
+ */
+
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './Button';
 import { useLanguage } from '../hooks/useLanguage';

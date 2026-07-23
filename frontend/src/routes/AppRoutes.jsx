@@ -1,3 +1,8 @@
+/**
+ * @file AppRoutes.jsx
+ * @description Main routing configuration defining all accessible paths in the application.
+ */
+
 import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -9,6 +14,7 @@ import { Loader } from '../components/Loader';
 // Lazy loading pages for optimized performance code splitting
 const Login = lazy(() => import('../pages/Auth/Login'));
 const Register = lazy(() => import('../pages/Auth/Register'));
+const ForgotPassword = lazy(() => import('../pages/Auth/ForgotPassword'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const ComplaintRegistration = lazy(() => import('../pages/ComplaintRegistration'));
 const ComplaintTracking = lazy(() => import('../pages/ComplaintTracking'));
@@ -94,6 +100,14 @@ export const AppRoutes = () => {
           element={
             <AuthLayout>
               <Register />
+            </AuthLayout>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <AuthLayout>
+              <ForgotPassword />
             </AuthLayout>
           }
         />
